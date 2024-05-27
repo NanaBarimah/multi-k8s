@@ -1,0 +1,16 @@
+sudo: required
+services:
+  - docker
+
+before_deploy: 
+  - docker build -t nanabarimah/react-test -f ./client/Dockerfile.dev ./client
+
+script: 
+  - docker run -e CI=true nanabarimah/react-test npm test -- --coverage
+
+after_success: 
+  - docker build -t nanabarimah/multi-client ./client
+  - docker build -t nanabarimah/multi-nginx ./nginx
+  - docker build -t nanabarimah/multi-server ./server
+  - docker build -t nanabarimah/multi-worker ./worker
+  
