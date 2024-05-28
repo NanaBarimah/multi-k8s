@@ -9,14 +9,27 @@ script:
   - docker run -e CI=true nanabarimah/react-test npm test -- --coverage
 
 after_success: 
-  - docker build -t nanabarimah/multi-client ./client
-  - docker build -t nanabarimah/multi-nginx ./nginx
-  - docker build -t nanabarimah/multi-server ./server
-  - docker build -t nanabarimah/multi-worker ./worker
+  - docker build -t nanabappiah7/multi-docker:multi-client ./client
+  - docker build -t nanabappiah7/multi-docker:multi-nginx ./nginx
+  - docker build -t nanabappiah7/multi-docker:multi-server ./server
+  - docker build -t nanabappiah7/multi-docker:multi-worker ./worker
   # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those images and push them to docker hub
-  - docker push nanabarimah/multi-client
-  - docker push nanabarimah/multi-nginx
-  - docker push nanabarimah/multi-server
-  - docker push nanabarimah/multi-worker
+  - docker push nanabappiah7/multi-docker:multi-client
+  - docker push nanabappiah7/multi-docker:multi-nginx
+  - docker push nanabappiah7/multi-docker:multi-server
+  - docker push nanabappiah7/multi-docker:multi-worker
+
+deploy:
+  provider: elasticbeanstalk
+  region: 'ap-southeast-2'
+  app: 'multi-docker'
+  env: 'Multi-docker-env'
+  bucket_name: 'elasticbeanstalk-ap-southeast-2-851725170596'
+  bucket_path: 'docker-multi'
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: 
+    secure: $AWS_SECRET_KEY
