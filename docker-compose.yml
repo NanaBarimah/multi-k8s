@@ -1,11 +1,11 @@
 version: "3"
 services:
   client:
-    image: "nanabappiah7/multi-docker:multi-client"
+    image: "nanabappiah7/multi-client"
     mem_limit: 128m
     hostname: client
   server:
-    image: "nanabappiah7/multi-docker:multi-server"
+    image: "nanabappiah7/multi-server"
     mem_limit: 128m
     hostname: api
     environment:
@@ -17,15 +17,15 @@ services:
       - PGPASSWORD=$PGPASSWORD
       - PGPORT=$PGPORT
   worker:
-    image: "nanabappiah7/multi-docker:multi-worker"
+    image: "nanabappiah7/multi-worker"
     mem_limit: 128m
     hostname: worker
     environment:
       - REDIS_HOST=$REDIS_HOST
       - REDIS_PORT=$REDIS_PORT
   nginx:
-    image: "nanabappiah7/multi-docker:multi-nginx"
+    image: "nanabappiah7/multi-nginx"
     mem_limit: 128m
     hostname: nginx
     ports:
-      - "80:80"
+      - "3050:80"
